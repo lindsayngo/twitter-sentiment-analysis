@@ -26,3 +26,7 @@ mongod --noauth --dbpath mongo/data
 ```
 python3 manage.py runserver
 ```
+
+## How to build angular.
+ng build --prod --output-path {PATH TO}\twitter-sentiment-analysis\backend\backend\main\static --watch --output-hashing none
+This would build the angular projects and bring them to django
