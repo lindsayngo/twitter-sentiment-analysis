@@ -120,3 +120,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# twitter api access information
+# https://python-twitter.readthedocs.io/en/latest/getting_started.html
+
+TWITTER_API_ACCESS = {
+    'TWT_API_KEY': '7qmxgNzLQZOYEqFLV5VbViT2q',
+    'TWT_API_SECRET': 'S2OlKXHwAO9Kuf4AOYYNF1hiQVSP1g0hwV0GRs8OpTEitrW01W',
+    'TWT_ACCESS_TOKEN': '2931606853-deuoJF5HiN3hCPPfV4wRnBNqN77by0oYBrYzXLm',
+    'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ'
+}
