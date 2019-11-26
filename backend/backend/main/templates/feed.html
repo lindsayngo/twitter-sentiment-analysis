@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if user_subs %}
+        {% for sub in user_subs %}
+            {{sub.topic}}
+        {% endfor %}
+    {% endif %}
+
+    <form method = "post" action="subscribe" > {% csrf_token %}
+        Username  <input id = "usern" type = "text" name = "username">
+        Topic <input id = "topic" type = "text" name = "topic">
+        Frequency <input id = "freq" type = "text" name = "freq"> 
+        <input type = "submit" value = "Subscribe to a Hashtag" >
+    </form>
+    <p></p>
+    <form method = "post" action="unsubscribe" > {% csrf_token %}
+        Username  <input id = "usern" type = "text" name = "username">
+        Topic <input id = "topic" type = "text" name = "topic">
+        Frequency <input id = "freq" type = "text" name = "freq"> 
+        <input type = "submit" value = "Unsubscribe from a Hashtag" >
+    </form>
+    <p></p>
+    <form method = "post" action="filter"> {% csrf_token %}
+        Topic <input id = "topic" type = "text" name = "topic">
+        Frequency <input id = "freq" type = "text" name = "freq"> 
+        <input type = "submit" value = "Filter">
+    </form>
+
+{% endblock content %}
