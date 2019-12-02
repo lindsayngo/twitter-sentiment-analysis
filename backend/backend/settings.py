@@ -79,6 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'main-db',
+        'HOST':'mongo',
+        'PORT': 27017,
     }
 }
 

@@ -32,3 +32,10 @@ python3 manage.py runserver
 ```
 ng build --prod --output-path <proj-root>\backend\backend\main\static --watch --output-hashing none
 ```
+
+## Build & Run Docker Compose
+- prereq: learn you some docker & install docker-compose
+```
+docker-compose build
+docker-compose up
+```
