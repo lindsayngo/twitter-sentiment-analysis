@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from socket import gethostname, gethostbyname
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +26,7 @@ SECRET_KEY = 'nin4lv1^q#kj3mrd(v6a#d7apuo7(6w$k56cc8@8#ptf90drz*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), 'localhost'] 
 
 # Application definition
 
@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'main-db',
-        'HOST':'mongo',
-        'PORT': 27017,
+        'HOST': os.environ.get("MONGO_DB_ADDR", "localhost"),
+        'PORT': os.environ.get("MONGO_DB_PORT", 27017),
     }
 }
 

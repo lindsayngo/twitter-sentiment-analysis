@@ -8,7 +8,9 @@ services:
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - MONGO_DB_ADDR=mongo
     ports:
-      - "8000:8000"
+      - "80:8000"
     links:
       - mongo
