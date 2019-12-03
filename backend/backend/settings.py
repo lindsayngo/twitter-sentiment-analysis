@@ -26,7 +26,7 @@ SECRET_KEY = 'nin4lv1^q#kj3mrd(v6a#d7apuo7(6w$k56cc8@8#ptf90drz*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), '34.95.29.94', 'localhost'] 
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), '34.95.29.94', 'localhost', '127.0.0.1'] 
 
 # Application definition
 
