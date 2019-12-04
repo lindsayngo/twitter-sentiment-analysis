@@ -1,14 +1,14 @@
 # twitter-sentiment-analysis
 
 ## Note
-- Your project root is the twitter-sentiment-analysis dir
+- Your <proj-root> is the twitter-sentiment-analysis dir
 
 ## Create and Run VirtualEnv
 - Prereqs: learn pip and virtualenv
 ```
 sudo pip3 install virtualenv
 pip3 install -r requirements.txt
-source <wherever your env is>
+source <path-to-env>/bin/activate
 ```
 
 ## Configuring Database
@@ -27,6 +27,15 @@ mongod --noauth --dbpath mongo/data
 python3 manage.py runserver
 ```
 
-## How to build angular.
-ng build --prod --output-path {PATH TO}\twitter-sentiment-analysis\backend\backend\main\static --watch --output-hashing none
-This would build the angular projects and bring them to django
+## Build Angular
+- This would build the angular projects and bring them to django
+```
+ng build --prod --output-path <proj-root>\backend\backend\main\static --watch --output-hashing none
+```
+
+## Build & Run Docker Compose
+- prereq: learn you some docker & install docker-compose
+```
+docker-compose build
+docker-compose up
+```
