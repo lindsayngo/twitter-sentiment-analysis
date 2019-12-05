@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <form method = "post" action="login"> {% csrf_token %}
+    <form method = "post" action="feed/"> {% csrf_token %}
         Username <input id = "username" type = "text" name = "username">
         Password <input id = "password" type = "text" name = "password"> 
         <input type = "submit" value = "Login">
