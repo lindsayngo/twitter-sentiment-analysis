@@ -12,6 +12,7 @@ class Subscription(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
     frequency = models.IntegerField() # in days
+    checked_since = models.IntegerField() #tracks when a subscription is ready to be checked
 
 class Job(models.Model):
     # fields needed for cron job, fill in when figured out

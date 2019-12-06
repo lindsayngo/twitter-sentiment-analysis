@@ -2,6 +2,7 @@
 import os
 import sys
 from backend.main import twitter_api
+#from chrontab import ChronTab
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -14,4 +15,13 @@ if __name__ == '__main__':
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
     twt_api_connection = twitter_api.create_conn()
+'''
+    chron = ChronTab()
+    job.new = chron.new(command='python update.py')
+    job.day.every(1)
+    chron.write()
+'''
+
+
