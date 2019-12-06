@@ -20,15 +20,14 @@ from django.views.generic.base import TemplateView
 from .main import views
 
 urlpatterns = [
+    path('register/', TemplateView.as_view(template_name="home.html"), name="register"), #migrated to ng
     path('admin/', admin.site.urls),
     path('feed/', views.login),
     path('feed/subscribe', views.subscribe, name = 'main-subscribe'),
     path('feed/unsubscribe', views.unsubscribe, name = 'main-unsubscribe'),
     path('feed/filter', views.filter, name = 'main-filter'),
-    path('register/', TemplateView.as_view(template_name="register.html"), name="register"),
     path('register/register', views.register),
-    path('login/', TemplateView.as_view(template_name="login.html"), name = "login"),
     path('feed/analyze/', views.analyze),
     path('feed/analyze/check/', views.check),
-    path('', TemplateView.as_view(template_name="login.html"), name = "login"),
+    path('', TemplateView.as_view(template_name="home.html"), name = "login"), #migrated to ng
 ]

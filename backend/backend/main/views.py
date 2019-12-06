@@ -6,12 +6,14 @@ import os
 import json
 import pandas as pd
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 
 objects = models.DjongoManager()
 
 # User request to subscribe to a hashtag - post
+@csrf_exempt
 def subscribe(request):
     print("IN SUBSCRIBE FUNCTION: current username - " + request.POST.get('username'))
     user = User.objects.get(username=request.POST.get('username'))
@@ -38,6 +40,7 @@ def subscribe(request):
     return render(request, 'feed.html', {'user':user.username, 'user_subs': user_subs})
 
 # User request to delete subscriptions - post
+@csrf_exempt
 def unsubscribe(request):
     print("IN UNSUBSCRIBE FUNCTION: current username - " + request.POST.get('username'))
     user = User.objects.get(username=request.POST.get('username'))
@@ -50,6 +53,7 @@ def unsubscribe(request):
     return render(request, 'feed.html', {'user':user.username, 'user_subs': user_subs})
 
 # User request to filter subscriptions
+@csrf_exempt
 def filter(request):
     user = User.objects.get(username=request.POST.get('username'))
     filtered_subs = Subscription.objects.filter(user_id=user,topic=request.POST.get('topic'),frequency = request.POST.get('freq'))
@@ -57,6 +61,7 @@ def filter(request):
     return render(request, 'feed.html', {'user_subs': filtered_subs})
 
 # Display User's subscribed hashtags - get
+@csrf_exempt
 def feed(request):
     print("ENTERING FEED FUNCTION")
     try:
@@ -68,6 +73,7 @@ def feed(request):
         return render(request, 'feed.html')
 
 # User registers
+@csrf_exempt
 def register(request):
     new_user = User.objects.create(username=request.POST.get('username'), password=request.POST.get('password'))
     print(new_user)
@@ -75,6 +81,7 @@ def register(request):
     return render(request, 'feed.html', {'user': request.POST.get('username')})
 
 # User logs in
+@csrf_exempt
 def login(request):
     # Authentication stuff ?
     print("ENTERING LOGIN FUNCTION")
@@ -94,10 +101,11 @@ def login(request):
     print(analysis_list)
     return render(request, 'feed.html', {'user': user.username, 'user_subs': user_subs, "list": analysis_list})
 
-
+@csrf_exempt
 def analyze(request):
     return render(request, 'analyze.html')
 
+@csrf_exempt
 def check(request):
     usern = request.GET.get('username')
     print(usern)
