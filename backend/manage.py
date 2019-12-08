@@ -2,6 +2,7 @@
 import os
 import sys
 from backend.main import twitter_api
+from crontab import CronTab
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')

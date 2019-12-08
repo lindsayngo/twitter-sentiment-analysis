@@ -6,12 +6,13 @@ class User(models.Model):
 
 class Hashtag(models.Model):
     topic = models.CharField(max_length=255, primary_key=True)
-    last_scanned = models.DateTimeField()
+    last_scanned = models.DateTimeField(default=None)
 
 class Subscription(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
     frequency = models.IntegerField() # in days
+    checked_since = models.IntegerField(default=None) # in days
 
 class Job(models.Model):
     # fields needed for cron job, fill in when figured out
@@ -32,4 +33,4 @@ class DataPoint(models.Model):
 
 class Analysis(models.Model):
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
-    timeseries = models.ArrayModelField(model_container = DataPoint)
+    timeseries = models.ArrayModelField(model_container = DataPoint, default=None, null=True)
