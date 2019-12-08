@@ -100,6 +100,7 @@ def analyze(request):
 
 def check(request):
     usern = request.GET.get('username')
+    '''
     print(usern)
     twt_api_connection = twitter_api.create_conn()
     hashtag = request.GET.get('topic')
@@ -144,6 +145,7 @@ def check(request):
     # create new analysis of the requested hashtag
     new_analysis = Analysis.objects.create(hashtag_id=htag,timeseries=[DataPoint(datetime.datetime.now(),intRep)])
     print(new_analysis)
+    '''
     
     # go to the feed page
     user = User.objects.get(username=usern)

@@ -15,8 +15,6 @@ if __name__ == '__main__':
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-
-    twt_api_connection = twitter_api.create_conn()
 '''
     chron = ChronTab()
     job.new = chron.new(command='python update.py')
