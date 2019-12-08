@@ -1,5 +1,5 @@
 import twitter
-from . import settings
+from .. import settings
 
 TWEET_COUNT = 200
 
