@@ -12,7 +12,7 @@ class Subscription(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
     frequency = models.IntegerField() # in days
-    checked_since = models.IntegerField() #tracks when a subscription is ready to be checked
+    checked_since = models.IntegerField(default=None) #tracks when a subscription is ready to be checked
 
 class Job(models.Model):
     # fields needed for cron job, fill in when figured out
@@ -21,7 +21,8 @@ class Job(models.Model):
         abstract = True
 
 class Queue(models.Model):
-    job = models.EmbeddedModelField(model_container = Job)
+    job = models.EmbeddedModelField(model_container=Job)
+
 
 class DataPoint(models.Model):
     time = models.DateTimeField() # sentiment analysis run date
@@ -33,4 +34,4 @@ class DataPoint(models.Model):
 
 class Analysis(models.Model):
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
-    timeseries = models.ArrayModelField(model_container = DataPoint)
+    timeseries = models.ArrayModelField(model_container=DataPoint, default=None)
