@@ -81,6 +81,7 @@ DATABASES = {
         'NAME': 'main-db',
         'HOST': os.environ.get("MONGO_DB_ADDR", "localhost"),
         'PORT': os.environ.get("MONGO_DB_PORT", 27017),
+        'ENFORCE_SCHEMA': False,
     }
 }
 
