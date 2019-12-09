@@ -10,7 +10,6 @@ def run_update():
 
 	twt_api_connection = twitter_api.create_conn()
 
-	time_period = '2019-12-05'
 	query_result = Subscription.objects.filter(checked_since=0)
 	hashtags = T.groupby('hashtag_id', query_result)
 
