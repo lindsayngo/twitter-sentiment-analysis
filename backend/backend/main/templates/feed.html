@@ -31,16 +31,15 @@
         </ul>
         {% endfor %}
     </div>
-    {% if list %}
+
     <div style="display: inline-block; width: 150px; text-align: center">
         <p><b>&nbsp &nbsp &nbsp &nbsp &nbsp Sentiment</b></p>
-        {% for a in list %}
+        {% for res in analysis_results %}
         <ul>
-            <li style="list-style-type:none">{{a}}</li>
+            <li style="list-style-type:none">{{res}}</li>
         </ul>
         {% endfor %}
     </div>
-    {% endif %}
 
     {% endif %}
 

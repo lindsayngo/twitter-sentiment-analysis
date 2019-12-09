@@ -1,15 +1,14 @@
 import pandas as pd
 from backend.main import twitter_api
 from .models import *
-import datetime
+from datetime import datetime
 import os
 
-def get_analysis_result(user, subscription):
+def get_analysis_result(topic):
 
     twt_api_connection = twitter_api.create_conn()
     count = '100'
     time_period = ''
-    topic = subscription.hashtag_id.topic
     tweets = twt_api_connection.GetSearch(raw_query=f'q=%23{topic}&result_type=recent&count={count}')
 
     lexicon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vader_lexicon.txt')
@@ -47,5 +46,5 @@ def get_analysis_result(user, subscription):
 
     # create new analysis of the requested hashtag
     htag = Hashtag.objects.get(topic=topic)
-    return Analysis.objects.create(hashtag_id=htag,timeseries=[DataPoint(datetime.datetime.now(),intRep)])
+    return Analysis.objects.create(hashtag_id=htag,timeseries=[DataPoint(datetime.now(),intRep)])
     

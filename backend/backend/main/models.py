@@ -6,22 +6,12 @@ class User(models.Model):
 
 class Hashtag(models.Model):
     topic = models.CharField(max_length=255, primary_key=True)
-    last_scanned = models.DateTimeField(default=None)
 
 class Subscription(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
     frequency = models.IntegerField() # in days
-    checked_since = models.IntegerField(default=None) # in days
-
-class Job(models.Model):
-    # fields needed for cron job, fill in when figured out
-    
-    class Meta: 
-        abstract = True
-
-class Queue(models.Model):
-    job = models.EmbeddedModelField(model_container = Job)
+    last_scanned = models.DateTimeField(default=None) # in days
 
 class DataPoint(models.Model):
     time = models.DateTimeField() # sentiment analysis run date
