@@ -12,6 +12,6 @@ def create_conn():
 	)
 	return api
 
-def get_tweets(hashtag, time_period):
-  count = TWEET_COUNT
-  api.GetSearch(raw_query=f'q=%23{hashtag}&result_type=recent&since={time_period}&count={count}')
+def get_tweets(api, hashtag, time_period):
+	count = TWEET_COUNT
+	api.GetSearch(raw_query=f'q=%23{hashtag}&result_type=recent&since={time_period}&count={count}')

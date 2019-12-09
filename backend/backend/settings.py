@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nin4lv1^q#kj3mrd(v6a#d7apuo7(6w$k56cc8@8#ptf90drz*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", True))
 
 ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), '34.95.29.94', 'localhost', '127.0.0.1'] 
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend.main',
-    'webpack_loader'
+    'webpack_loader',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,7 @@ DATABASES = {
         'NAME': 'main-db',
         'HOST': os.environ.get("MONGO_DB_ADDR", "localhost"),
         'PORT': os.environ.get("MONGO_DB_PORT", 27017),
+        'ENFORCE_SCHEMA': False,
     }
 }
 
@@ -115,7 +117,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -132,3 +134,8 @@ TWITTER_API_ACCESS = {
     'TWT_ACCESS_TOKEN': '2931606853-deuoJF5HiN3hCPPfV4wRnBNqN77by0oYBrYzXLm',
     'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ'
 }
+
+# subscription jobs
+CRONJOBS = [
+    ('*/1 * * * *', 'backend.subcription_job', '>> /tmp/tweets.log')
+]

@@ -2,13 +2,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <form method = "post" action="register"> {% csrf_token %}
-        Username <input id = "username" type = "text" name = "username">
-        Password <input id = "password" type = "text" name = "password"> 
-        <input type = "submit" value = "Register">
-    </form>
-    <p>
-        Already have an account? <a href="{% url 'login' %}"> Login </a>
-    </p>
-    
+{% if error %}
+Error: {{error}}
+{% endif %}
+
+<form method="post" action="/register/"> {% csrf_token %}
+    Username <input id="username" type="text" name="username">
+    Password <input id="password" type="password" name="password">
+    <input type="submit" value="Register">
+</form>
+<p>
+    Already have an account? <a href="/login/"> Login </a>
+</p>
+
 {% endblock content %}

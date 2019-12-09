@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render
 from .models import *
 from bson.objectid import ObjectId
 from backend.main import twitter_api
@@ -7,78 +6,12 @@ import os
 import json
 import pandas as pd
 from django.shortcuts import redirect
-from django.views.decorators.csrf import csrf_exempt
-from backend.main.analyze import get_analysis_result
-from datetime import datetime
-from django.db.models import Q
-from backend.main.update import run_update
+import datetime
+from django.http import HttpResponse
 
-def home(request):
-    return render(request, 'login.html')
-
-# clear session, return to home
-def logout(request):
-    request.session.delete()
-    return redirect("/login")
-
-def login(request):
-    if "user" in request.session:
-        return redirect("/feed")
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.filter(Q(username=username), Q(password=password))
-        if not user:
-            return render(request, 'login.html', {'error': 'User does not exist'})
-        request.session['user'] = username
-        return redirect('/feed')
-    return render(request, 'login.html')
-
-def register(request):
-    if "user" in request.session:
-        return redirect("/feed")
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.filter(Q(username=username))
-        if user:
-            return render(request, 'register.html', {'error': 'Username is taken'})
-
-        new_user = User.objects.create(username=username, password=password)
-        request.session["user"] = username
-        return redirect("/feed")
-    return render(request, 'register.html')
-
-def feed(request):
-    if "user" not in request.session:
-        return redirect("/login")
-
-    uname = request.session.get("user")
-    user = User.objects.get(username=uname)
-    subs = Subscription.objects.filter(user_id = user)    
-
-    error = request.session.get("subscription_error") or None
-    graph = request.session.get("graph") or None
-
-    analysis_results = []
-    for sub in subs:
-        # for each subscription, get analysis results
-        htag = sub.hashtag_id
-        analysis = Analysis.objects.get(hashtag_id = htag)
-        analysis_results.append(analysis.timeseries[-1].value)
-
-    content = {
-        'user': user.username, 
-        'user_subs': subs, 
-        'error': error, 
-        'graph': graph,
-        'analysis_results': analysis_results,
-    }
-
-    return render(request, 'feed.html', content)
+objects = models.DjongoManager()
 
 # User request to subscribe to a hashtag - post
-@csrf_exempt
 def subscribe(request):
     print("IN SUBSCRIBE FUNCTION: current username - " + request.POST.get('username'))
     user = User.objects.get(username=request.POST.get('username'))
@@ -105,7 +38,6 @@ def subscribe(request):
     return render(request, 'feed.html', {'user':user.username, 'user_subs': user_subs})
 
 # User request to delete subscriptions - post
-@csrf_exempt
 def unsubscribe(request):
     print("IN UNSUBSCRIBE FUNCTION: current username - " + request.POST.get('username'))
     user = User.objects.get(username=request.POST.get('username'))
@@ -118,7 +50,6 @@ def unsubscribe(request):
     return render(request, 'feed.html', {'user':user.username, 'user_subs': user_subs})
 
 # User request to filter subscriptions
-@csrf_exempt
 def filter(request):
     user = User.objects.get(username=request.POST.get('username'))
     filtered_subs = Subscription.objects.filter(user_id=user,topic=request.POST.get('topic'),frequency = request.POST.get('freq'))
@@ -126,9 +57,9 @@ def filter(request):
     return render(request, 'feed.html', {'user_subs': filtered_subs})
 
 # Display User's subscribed hashtags - get
-@csrf_exempt
 def feed(request):
     print("ENTERING FEED FUNCTION")
+    
     try:
         user = User.objects.get(username = request.POST.get('user'))
         user_subs = Subscription.objects.get( user_id = user )
@@ -138,39 +69,40 @@ def feed(request):
         return render(request, 'feed.html')
 
 # User registers
-@csrf_exempt
 def register(request):
-    new_user = User.objects.create(username=request.POST.get('username'), password=request.POST.get('password'))
-    print(new_user)
-    # new_user.save()
-    return render(request, 'feed.html', {'user': request.POST.get('username')})
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        new_user = User.objects.get_or_create(username=username, password=password)
+        return render(request, 'feed.html', {'user': request.POST.get('username')})
+    return HttpResponse(status=405)
 
 # User logs in
-@csrf_exempt
 def login(request):
-    # Authentication stuff ?
-    print("ENTERING LOGIN FUNCTION")
-    user = User.objects.get(username=request.POST.get('username'))
-    user_subs = Subscription.objects.filter( user_id = user )
-    print(user_subs)
-    analysis_list = []
-    for s in user_subs:
-        # for each subscription, retrieve the hashtag_id, find the analysis
-        htagid = s.hashtag_id
-        try:
-            analysis = Analysis.objects.get(hashtag_id = htagid)
-            analysis_list.append(analysis.timeseries[0].value)
-        except:
-            # analysis has not yet happened for the current hashtag
-            analysis_list.append(-1)
-    print(analysis_list)
-    return render(request, 'feed.html', {'user': user.username, 'user_subs': user_subs, "list": analysis_list})
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if User.objects.filter(username=username, password=password).exists():
+            user = User.objects.get(username=username, password=password)
+            user_subs = Subscription.objects.filter(user_id = user)
+            analysis_list = []
+            for s in user_subs:
+                # for each subscription, retrieve the hashtag_id, find the analysis
+                htagid = s.hashtag_id
+                try:
+                    analysis = Analysis.objects.get(hashtag_id = htagid)
+                    analysis_list.append(analysis.timeseries[0].value)
+                except:
+                    # analysis has not yet happened for the current hashtag
+                    analysis_list.append(-1)
+            print(analysis_list)
+            return redirect('/feed')
+        return render(request, 'login.html', {'error': 'User does not exist'})
+    return render(request, 'login.html')
 
-@csrf_exempt
 def analyze(request):
     return render(request, 'analyze.html')
 
-@csrf_exempt
 def check(request):
     usern = request.GET.get('username')
     print(usern)

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import sys
-from backend.main import twitter_api
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -14,4 +13,3 @@ if __name__ == '__main__':
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-    twt_api_connection = twitter_api.create_conn()
