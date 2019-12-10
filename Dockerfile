@@ -8,5 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/Tweetproj/
 WORKDIR /usr/src/Tweetproj/backend
+RUN chmod +x ./run.sh
 
-CMD [ "python", "./manage.py", "runserver", "0.0.0.0:8000" ]
+CMD [ "./run.sh" ]

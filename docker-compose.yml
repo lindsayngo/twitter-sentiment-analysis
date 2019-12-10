@@ -7,8 +7,7 @@ services:
       - "27017"
   web:
     build: .
-    command: bash -c "
-      python manage.py runserver 0.0.0.0:8000"
+    command: "./run.sh"
     environment:
       - MONGO_DB_ADDR=mongo
       - DEBUG=False
