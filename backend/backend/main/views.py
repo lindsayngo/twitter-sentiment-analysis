@@ -80,8 +80,7 @@ def feed(request):
             content['topic_analysis'] = topic_analysis
             for elem in analysis[0].timeseries:
                 content['timeseries'].append([(elem.time-datetime(1970,1,1)).total_seconds() * 1000, elem.value/1000])
-                print((elem.time-datetime(1970,1,1)).total_seconds())
-
+                
         if not analysis or not analysis[0].timeseries:
             analysis_results.append("N/A")
         else:
