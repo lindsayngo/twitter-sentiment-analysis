@@ -1,11 +1,10 @@
-from background_task import background
 from backend.main.update import run_update
 from datetime import timedelta, datetime
-from background_task.models import Task
+import time
 
-@background(schedule=5)
 def subscription_job():
-    print("hellow")
-    # run_update()
+    while True:
+        run_update()
+        time.sleep(5) # runs every 15s for demo purposes
 
-subscription_job(repeat=3)
+subscription_job()

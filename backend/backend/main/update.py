@@ -14,7 +14,7 @@ def run_update():
     subscriptions = Subscription.objects.all()
     for sub in subscriptions:
         # check if ready to scan
-        if (datetime.today() - sub.last_scanned).days >= sub.frequency:
+        if not sub.last_scanned or ((datetime.today() - sub.last_scanned).days >= sub.frequency):
             if sub.hashtag_id.topic not in batch_job:
                 batch_job[sub.hashtag_id.topic] = []     
             batch_job[sub.hashtag_id.topic].append(sub.user_id.username)
@@ -22,6 +22,7 @@ def run_update():
     print("RUNNING ANALYSIS")
 
     if not batch_job:
+        print("JOB DONE")
         return 
 
     # make connection
