@@ -49,7 +49,6 @@ def register(request):
 def feed(request):
     if "user" not in request.session:
         return redirect("/login")
-
     uname = request.session.get("user")
     user = User.objects.get(username=uname)
     subs = Subscription.objects.filter(user_id = user)    
@@ -57,23 +56,35 @@ def feed(request):
     error = request.session.get("subscription_error") or None
     graph = request.session.get("graph") or None
 
+    topic = request.GET.get('topic', '')
+
     analysis_results = []
-    for sub in subs:
-        # for each subscription, get analysis results
-        htag = sub.hashtag_id
-        analysis = Analysis.objects.filter(hashtag_id = htag)
-        if not analysis or not analysis[0].timeseries:
-            analysis_results.append("N/A")
-        else:
-            analysis_results.append(analysis[0].timeseries[-1].value)
 
     content = {
         'user': user.username, 
         'user_subs': subs, 
         'error': error, 
-        'graph': graph,
-        'analysis_results': analysis_results,
+        'graph': graph
     }
+
+    for sub in subs:
+        # for each subscription, get analysis results
+        htag = sub.hashtag_id
+        analysis = Analysis.objects.filter(hashtag_id = htag)
+
+        if (htag.topic == topic):
+            topic_analysis = analysis[0].timeseries[-1].value/1000
+            content['topic'] = topic
+            content['topic_analysis'] = topic_analysis
+
+        if not analysis or not analysis[0].timeseries:
+            analysis_results.append("N/A")
+        else:
+            analysis_results.append(analysis[0].timeseries[-1].value/1000)
+
+        print(analysis)
+
+    content['analysis_results'] = analysis_results
 
     return render(request, 'feed.html', content)
 
@@ -142,35 +153,14 @@ def analyze(request):
     user = User.objects.get(username=uname)
     topic = request.GET.get('topic')
     htag = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
+    concat = '/feed'
     if htag:
         # insert magic in templates to render graph
         request.session['graph'] = True 
         request.session['subscription_error'] = None
+        concat = '/feed?topic=' + topic
     else:
         request.session['graph'] = False 
         error = "You are not subscribed to this hashtag"
         request.session['subscription_error'] = error
-    concat = '/charts?topic=' + topic
     return redirect(concat)
-
-def charts(request):
-    uname = request.session.get("user")
-    user = User.objects.get(username=uname)
-    topic = request.GET.get('topic', '')
-
-    analysis = Analysis.objects.filter(hashtag_id = topic)
-
-    if not analysis or not analysis[0].timeseries:
-        analysis_result = "N/A"
-    else:
-        analysis_result = analysis[0].timeseries[-1].value
-
-    print(analysis)
-
-    content = {
-        'topic': topic,
-    }
-    print(topic)
-    print(content)
-
-    return render(request, 'charts.html', content)

@@ -1,11 +1,10 @@
-{% extends "base.html" %}
 {% block content %}
 
+{% load static %}
+
 <div>
-    {% if topic %}
-    Topic: {{topic}}
-    {% endif %}
     <div id="container-speed"></div>
+    <link rel="stylesheet" href="{% static 'charts.css' %}">
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
@@ -17,7 +16,7 @@
         chart: {
             type: 'solidgauge'
         },
-        title: null,
+        title: '{{topic}}',
         pane: {
             center: ['50%', '85%'],
             size: '140%',
@@ -34,9 +33,8 @@
         // the value axis
         yAxis: {
             stops: [
-                [0.1, '#55BF3B'], // green
-                [0.5, '#DDDF0D'], // yellow
-                [0.9, '#DF5353'] // red
+                [-4, '#ff8400'],
+                [4, '#95ff00'],
             ],
             lineWidth: 0,
             tickWidth: 0,
@@ -54,38 +52,32 @@
                 dataLabels: {
                     y: 5,
                     borderWidth: 0,
-                    useHTML: true
+                    useHTML: true,
+                    enable: false
                 }
             }
         }
     };
-    // The speed gauge
+
     var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
         yAxis: {
-            min: -400,
-            max: 400,
-            title: {
-                text: '{{topic}}'
-            }
+            min: -4,
+            max: 4,
         },
-
         credits: {
             enabled: false
         },
-
         series: [{
             name: '{{topic}}',
-            data: [80],
+            data: [{{topic_analysis}}],
             dataLabels: {
                 format:
                     '<div style="text-align:center">' +
                     '<span style="font-size:25px">{y}</span><br/>' +
-                    '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+                    '<span style="font-size:12px;opacity:0.4">#{{topic}} Sentiment</span>' +
                     '</div>'
             },
-            tooltip: {
-                valueSuffix: 'Sentiment'
-            }
+            tooltip:  { enabled: false }
         }]
 
     }));

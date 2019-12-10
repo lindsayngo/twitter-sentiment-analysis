@@ -10,10 +10,8 @@ urlpatterns = [
     path('feed/', views.feed),
     path('subscribe/', views.subscribe, name = 'main-subscribe'),
     path('unsubscribe/', views.unsubscribe, name = 'main-unsubscribe'),
-    # path('filter/', views.filter, name = 'main-filter'),
     path('register/', views.register),
     path('login/', views.login),
     path('analyze/', views.analyze),
-    path('charts/', views.charts),
     path('', views.feed),
 ]
