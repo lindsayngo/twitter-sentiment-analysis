@@ -82,17 +82,9 @@
 </div>
 
 <div style="margin-top: 15px; margin-bottom: 15px">
-    
-    <canvas id="myChart" width="500" height="400"></canvas>
-
-    <script type="text/javascript">
-        $.get('{% url "line_chart_json" %}', function(data) {
-            var ctx = $("#myChart").get(0).getContext("2d");
-            new Chart(ctx, {
-                type: 'line', data: data
-            });
-        });
-    </script>
+    {% if graph %}
+        
+    {% endif %}
 </div>
 
 {% endblock content %}

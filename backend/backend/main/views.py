@@ -8,7 +8,6 @@ from backend.main.update import run_update
 from django.views.decorators.csrf import csrf_exempt
 from random import randint
 from django.views.generic import TemplateView
-from chartjs.views.lines import BaseLineChartView
 
 def home(request):
     return render(request, 'login.html')
@@ -135,7 +134,6 @@ def unsubscribe(request):
 
     return redirect('/feed')
 
-
 def analyze(request):
     if "user" not in request.session:
         return redirect("/login")
@@ -144,7 +142,6 @@ def analyze(request):
     user = User.objects.get(username=uname)
     topic = request.GET.get('topic')
     htag = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
-
     if htag:
         # insert magic in templates to render graph
         request.session['graph'] = True 
@@ -153,25 +150,27 @@ def analyze(request):
         request.session['graph'] = False 
         error = "You are not subscribed to this hashtag"
         request.session['subscription_error'] = error
+    concat = '/charts?topic=' + topic
+    return redirect(concat)
 
-    return redirect('/feed')
+def charts(request):
+    uname = request.session.get("user")
+    user = User.objects.get(username=uname)
+    topic = request.GET.get('topic', '')
 
-class LineChartJSONView(BaseLineChartView):
-    def get_labels(self):
-        """Return 7 labels for the x-axis."""
-        return ["January", "February", "March", "April", "May", "June", "July"]
+    analysis = Analysis.objects.filter(hashtag_id = topic)
 
-    def get_providers(self):
-        """Return names of datasets."""
-        return ["Central", "Eastside", "Westside"]
+    if not analysis or not analysis[0].timeseries:
+        analysis_result = "N/A"
+    else:
+        analysis_result = analysis[0].timeseries[-1].value
 
-    def get_data(self):
-        """Return 3 datasets to plot."""
+    print(analysis)
 
-        return [[75, 44, 92, 11, 44, 95, 35],
-                [41, 92, 18, 3, 73, 87, 92],
-                [87, 21, 94, 3, 90, 13, 65]]
+    content = {
+        'topic': topic,
+    }
+    print(topic)
+    print(content)
 
-
-line_chart = TemplateView.as_view(template_name='line_chart.html')
-line_chart_json = LineChartJSONView.as_view()
+    return render(request, 'charts.html', content)
