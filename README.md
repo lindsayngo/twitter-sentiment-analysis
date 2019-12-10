@@ -27,6 +27,11 @@ mongod --noauth --dbpath mongo/data
 python3 manage.py runserver
 ```
 
+## Run scheduler
+```
+python3 manage.py process_tasks
+```
+
 ## Build Angular
 - This would build the angular projects and bring them to django
 ```

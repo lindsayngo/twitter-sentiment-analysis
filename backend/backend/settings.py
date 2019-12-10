@@ -26,7 +26,7 @@ SECRET_KEY = 'nin4lv1^q#kj3mrd(v6a#d7apuo7(6w$k56cc8@8#ptf90drz*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", True))
 
-ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), '34.95.29.94', 'localhost', '127.0.0.1'] 
+ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), '35.203.102.248', 'localhost', '127.0.0.1'] 
 
 # Application definition
 
@@ -132,9 +132,10 @@ STATIC_URL = '/static/'
 # twitter api access information
 # https://python-twitter.readthedocs.io/en/latest/getting_started.html
 
+
 TWITTER_API_ACCESS = {
     'TWT_API_KEY': '7qmxgNzLQZOYEqFLV5VbViT2q',
     'TWT_API_SECRET': 'S2OlKXHwAO9Kuf4AOYYNF1hiQVSP1g0hwV0GRs8OpTEitrW01W',
     'TWT_ACCESS_TOKEN': '2931606853-deuoJF5HiN3hCPPfV4wRnBNqN77by0oYBrYzXLm',
-    'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ'
+    'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ',
 }
