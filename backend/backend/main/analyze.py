@@ -1,15 +1,13 @@
 import pandas as pd
-from backend.main import twitter_api
 from .models import *
 from datetime import datetime
 import os
+from backend.main import twitter_api
 
-def get_analysis_result(topic):
+def get_analysis_result(topic, conn):
 
-    twt_api_connection = twitter_api.create_conn()
-    count = '100'
-    time_period = ''
-    tweets = twt_api_connection.GetSearch(raw_query=f'q=%23{topic}&result_type=recent&count={count}')
+    COUNT = '100' # free version of api limit
+    tweets = conn.GetSearch(raw_query=f'q=%23{topic}&result_type=recent&count={COUNT}')
 
     lexicon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vader_lexicon.txt')
     lexiconDF = pd.read_csv(open(lexicon), sep='\t', header=None, names=('token', 'polarity', 'sentiment', 'list'))

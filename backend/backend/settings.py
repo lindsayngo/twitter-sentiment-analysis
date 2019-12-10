@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend.main',
     'webpack_loader',
-    'django_crontab',
+    'background_task',
 ]
 
 MIDDLEWARE = [
@@ -134,8 +134,3 @@ TWITTER_API_ACCESS = {
     'TWT_ACCESS_TOKEN': '2931606853-deuoJF5HiN3hCPPfV4wRnBNqN77by0oYBrYzXLm',
     'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ'
 }
-
-# subscription jobs
-CRONJOBS = [
-    ('*/1 * * * *', 'backend.subcription_job', '>> /tmp/tweets.log')
-]
