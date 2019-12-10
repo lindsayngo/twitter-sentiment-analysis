@@ -2,6 +2,7 @@ from .models import *
 from . import twitter_api
 from datetime import datetime
 from backend.main.analyze import get_analysis_result
+from backend.main import twitter_api
 
 def run_update():
 
@@ -13,7 +14,6 @@ def run_update():
     subscriptions = Subscription.objects.all()
     for sub in subscriptions:
         # check if ready to scan
-        print((datetime.now() - sub.last_scanned).days)
         if (datetime.today() - sub.last_scanned).days >= sub.frequency:
             if sub.hashtag_id.topic not in batch_job:
                 batch_job[sub.hashtag_id.topic] = []     
@@ -21,12 +21,17 @@ def run_update():
 
     print("RUNNING ANALYSIS")
 
+    if not batch_job:
+        return 
+
+    # make connection
+    conn = twitter_api.create_conn()
+
     # run analysis on hashtags in batch_job
     for topic, users in batch_job.items():
-        get_analysis_result(topic)
+        get_analysis_result(topic, conn)
         for user in users:
             sub = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
             sub.update(last_scanned=datetime.today())
-            print(sub)
 
     print("JOB DONE")

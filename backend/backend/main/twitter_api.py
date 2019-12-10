@@ -11,7 +11,3 @@ def create_conn():
 	                  access_token_secret= twt['TWT_ACCESS_SECRET'],
 	)
 	return api
-
-def get_tweets(api, hashtag, time_period):
-	count = TWEET_COUNT
-	api.GetSearch(raw_query=f'q=%23{hashtag}&result_type=recent&since={time_period}&count={count}')

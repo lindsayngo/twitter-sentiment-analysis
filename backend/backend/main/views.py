@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from backend.main.analyze import get_analysis_result
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Q
 from backend.main.update import run_update
 from django.views.decorators.csrf import csrf_exempt
@@ -62,8 +62,11 @@ def feed(request):
     for sub in subs:
         # for each subscription, get analysis results
         htag = sub.hashtag_id
-        analysis = Analysis.objects.get(hashtag_id = htag)
-        analysis_results.append(analysis.timeseries[-1].value)
+        analysis = Analysis.objects.filter(hashtag_id = htag)
+        if not analysis or not analysis[0].timeseries:
+            analysis_results.append("N/A")
+        else:
+            analysis_results.append(analysis[0].timeseries[-1].value)
 
     content = {
         'user': user.username, 
@@ -96,12 +99,9 @@ def subscribe(request):
                 user_id=user, 
                 hashtag_id=new_htag, 
                 frequency=int(freq),
-                last_scanned=datetime.now()
+                last_scanned=(datetime.today() - timedelta(days=int(freq))),
             )
             request.session['subscription_error'] = None
-
-            # run first analysis
-            analysis = get_analysis_result(topic)
 
         else:
             error = "Frequency field must be a nonzero postive integer (X days)!"
