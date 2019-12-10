@@ -153,15 +153,24 @@ def analyze(request):
     uname = request.session.get("user")
     user = User.objects.get(username=uname)
     topic = request.GET.get('topic')
-    htag = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
+    sub = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
+    htag = Hashtag.objects.get(topic=topic)
     concat = '/feed'
+    
     if htag:
-        # insert magic in templates to render graph
-        request.session['graph'] = True 
-        request.session['subscription_error'] = None
-        concat = '/feed?topic=' + topic
+        analysis = Analysis.objects.filter(hashtag_id = htag)
+        if analysis:
+            # insert magic in templates to render graph
+            request.session['graph'] = True 
+            request.session['subscription_error'] = None
+            concat = '/feed?topic=' + topic
+        else:
+            request.session['graph'] = False 
+            error = "You graphs for this subscription are not availble yet"
+            request.session['subscription_error'] = error
     else:
         request.session['graph'] = False 
         error = "You are not subscribed to this hashtag"
         request.session['subscription_error'] = error
     return redirect(concat)
+    
