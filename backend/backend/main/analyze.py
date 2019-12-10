@@ -43,5 +43,15 @@ def get_analysis_result(topic, conn):
 
     # create new analysis of the requested hashtag
     htag = Hashtag.objects.get(topic=topic)
-    return Analysis.objects.create(hashtag_id=htag,timeseries=[DataPoint(datetime.now(),intRep)])
+    analysisTimeSeries = []
+
+    #If analysis is already there
+    try:
+        analysisTimeSeries = Analysis.objects.filter(hashtag_id = htag)[0].timeseries
+        analysisTimeSeries.append(DataPoint(datetime.now(),intRep))
+    except:
+        analysisTimeSeries.append(DataPoint(datetime.now(),intRep))
+    
+    Analysis.objects.filter(hashtag_id = htag).delete()
+    return Analysis.objects.create(hashtag_id=htag, timeseries=analysisTimeSeries)
     

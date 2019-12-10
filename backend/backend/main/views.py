@@ -77,12 +77,12 @@ def feed(request):
             content['topic'] = topic
             content['topic_analysis'] = topic_analysis
 
+       # print(analysis.timeseries)
+
         if not analysis or not analysis[0].timeseries:
             analysis_results.append("N/A")
         else:
             analysis_results.append(analysis[0].timeseries[-1].value/1000)
-
-        print(analysis)
 
     content['analysis_results'] = analysis_results
 
