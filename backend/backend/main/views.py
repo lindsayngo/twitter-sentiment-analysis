@@ -8,6 +8,7 @@ from backend.main.update import run_update
 from django.views.decorators.csrf import csrf_exempt
 from random import randint
 from django.views.generic import TemplateView
+from datetime import datetime
 
 def home(request):
     return render(request, 'login.html')
@@ -64,7 +65,8 @@ def feed(request):
         'user': user.username, 
         'user_subs': subs, 
         'error': error, 
-        'graph': graph
+        'graph': graph,
+        'timeseries': []
     }
 
     for sub in subs:
@@ -76,8 +78,9 @@ def feed(request):
             topic_analysis = analysis[0].timeseries[-1].value/1000
             content['topic'] = topic
             content['topic_analysis'] = topic_analysis
-
-       # print(analysis.timeseries)
+            for elem in analysis[0].timeseries:
+                content['timeseries'].append([(elem.time-datetime(1970,1,1)).total_seconds() * 1000, elem.value/1000])
+                print((elem.time-datetime(1970,1,1)).total_seconds())
 
         if not analysis or not analysis[0].timeseries:
             analysis_results.append("N/A")
@@ -85,7 +88,6 @@ def feed(request):
             analysis_results.append(analysis[0].timeseries[-1].value/1000)
 
     content['analysis_results'] = analysis_results
-
     return render(request, 'feed.html', content)
 
 
