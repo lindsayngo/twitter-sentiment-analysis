@@ -38,7 +38,6 @@ def get_analysis_result(topic):
     temp = temp.drop(columns=['num', 'word'])
     seriesTweets = seriesTweets.merge(temp, left_index=True, right_index=True)
 
-    print(seriesTweets)
     print(seriesTweets['polarity'].mean())
 
     # convert seriesTweets mean sentiment to integer because of djongo bug with decimals

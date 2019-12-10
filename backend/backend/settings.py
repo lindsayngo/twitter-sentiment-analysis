@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'backend.main',
     'webpack_loader',
     'django_crontab',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,10 +51,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
-
+ 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -134,6 +136,8 @@ TWITTER_API_ACCESS = {
     'TWT_ACCESS_TOKEN': '2931606853-deuoJF5HiN3hCPPfV4wRnBNqN77by0oYBrYzXLm',
     'TWT_ACCESS_SECRET': '5o6kpYwNJXMKkN2GuQBUuaXJQpJhMjjlgi8Jq1YmDONKZ'
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # subscription jobs
 CRONJOBS = [
