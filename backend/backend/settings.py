@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'django_crontab',
     'corsheaders',
+    'chartjs',
 ]
 
 MIDDLEWARE = [
