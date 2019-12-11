@@ -159,3 +159,6 @@ dmypy.json
 
 env
 venv
+
+# secret key
+/backend/backend/secretkey.py
