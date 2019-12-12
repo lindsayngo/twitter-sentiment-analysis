@@ -8,6 +8,12 @@ def get_analysis_result(topic, conn):
 
     COUNT = '100' # free version of api limit
     tweets = conn.GetSearch(raw_query=f'q=%23{topic}&result_type=recent&count={COUNT}')
+    htag = Hashtag.objects.get(topic=topic)
+
+    # invalid hashtag
+    if not tweets:
+        Analysis.objects.create(hashtag_id=htag, timeseries=[], invalid_hashtag=True)
+        return
 
     lexicon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vader_lexicon.txt')
     lexiconDF = pd.read_csv(open(lexicon), sep='\t', header=None, names=('token', 'polarity', 'sentiment', 'list'))
@@ -42,7 +48,6 @@ def get_analysis_result(topic, conn):
     intRep = int(seriesTweets['polarity'].mean()*1000)
 
     # create new analysis of the requested hashtag
-    htag = Hashtag.objects.get(topic=topic)
     analysisTimeSeries = []
 
     #If analysis is already there
@@ -53,5 +58,6 @@ def get_analysis_result(topic, conn):
         analysisTimeSeries.append(DataPoint(datetime.now(),intRep))
     
     Analysis.objects.filter(hashtag_id = htag).delete()
-    return Analysis.objects.create(hashtag_id=htag, timeseries=analysisTimeSeries)
+    Analysis.objects.create(hashtag_id=htag, timeseries=analysisTimeSeries)
+    return 
     

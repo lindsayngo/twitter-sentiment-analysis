@@ -1,14 +1,16 @@
 # twitter-sentiment-analysis
 
-## Note
-- Your <proj-root> is the twitter-sentiment-analysis dir
+## Getting Started
+- Git clone the project
+- Your ```<proj-root>``` is the twitter-sentiment-analysis dir
 
 ## Create and Run VirtualEnv
-- Prereqs: learn pip and virtualenv
+- Prereqs: learn you some pip and virtualenv
 ```
 sudo pip3 install virtualenv
-pip3 install -r requirements.txt
+python3 -m virtualenv env
 source <path-to-env>/bin/activate
+pip3 install -r requirements.txt
 ```
 
 ## Configuring Database
@@ -16,10 +18,16 @@ source <path-to-env>/bin/activate
   
 Run the mongo daemon ```mongod```
 
-If you don't know where to store your data, run it in your project root
+If you don't know where to store your data, run it in ```<proj-root>```
 ```
+mkdir mongo/data
 mongod --noauth --dbpath mongo/data
 ```
+
+## Setting up Twitter API Key
+- get your own key
+- create a ```<proj-root>/backend/backend/secretkey.py``` file and put key in here
+- settings.py will import the key set as TWT_API_SECRET_VALUE
 
 ## Run Django 
 - Prereqs: learn you some django
@@ -27,19 +35,13 @@ mongod --noauth --dbpath mongo/data
 python3 manage.py runserver
 ```
 
-## Run scheduler
+## Run Background Task Scheduler
 ```
 python3 manage.py process_tasks
 ```
 
-## Build Angular
-- This would build the angular projects and bring them to django
-```
-ng build --prod --output-path <proj-root>\backend\backend\main\static --watch --output-hashing none
-```
-
 ## Build & Run Docker Compose
-- prereq: learn you some docker & install docker-compose
+- prereq: learn you some docker & docker-compose
 ```
 docker-compose build
 docker-compose up

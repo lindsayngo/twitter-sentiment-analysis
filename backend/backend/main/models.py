@@ -24,3 +24,4 @@ class DataPoint(models.Model):
 class Analysis(models.Model):
     hashtag_id = models.ForeignKey(Hashtag, on_delete=models.CASCADE)
     timeseries = models.ArrayModelField(model_container = DataPoint, default=None, null=True)
+    invalid_hashtag = models.BooleanField(default=False)

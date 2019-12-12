@@ -81,7 +81,7 @@ def feed(request):
             for elem in analysis[0].timeseries:
                 content['timeseries'].append([(elem.time-datetime(1970,1,1)).total_seconds() * 1000, elem.value/1000])
                 
-        if not analysis or not analysis[0].timeseries:
+        if not analysis or analysis[0].invalid_hashtag or not analysis[0].timeseries:
             analysis_results.append("N/A")
         else:
             analysis_results.append(analysis[0].timeseries[-1].value/1000)
@@ -154,20 +154,28 @@ def analyze(request):
     user = User.objects.get(username=uname)
     topic = request.GET.get('topic')
     sub = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
-    htag = Hashtag.objects.get(topic=topic)
     concat = '/feed'
     
-    if htag:
+    if sub:
+        htag = Hashtag.objects.get(topic=topic)
         analysis = Analysis.objects.filter(hashtag_id = htag)
         if analysis:
-            # insert magic in templates to render graph
-            request.session['graph'] = True 
-            request.session['subscription_error'] = None
-            concat = '/feed?topic=' + topic
+            # no tweets for this hashtag
+            if analysis[0].invalid_hashtag:
+                request.session['graph'] = False 
+                error = "No past tweets were found for this hashtag."
+                request.session['subscription_error'] = error
+            # analysis found for this hashtag
+            else:
+                request.session['graph'] = True 
+                request.session['subscription_error'] = None
+                concat = '/feed?topic=' + topic
+        # subcription time has not come 
         else:
             request.session['graph'] = False 
-            error = "You graphs for this subscription are not availble yet"
+            error = "Your graphs for this subscription are not availble until your time."
             request.session['subscription_error'] = error
+    # invalid subscription
     else:
         request.session['graph'] = False 
         error = "You are not subscribed to this hashtag"
