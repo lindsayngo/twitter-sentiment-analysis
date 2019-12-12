@@ -5,83 +5,71 @@
 
 <link rel="stylesheet" href="{% static 'feed.css' %}">
 
-<a href="/logout/"> Logout </a>
-
-<div style="margin-top: 15px; margin-bottom: 15px">
+<div class='user-info'>
     {% if user %}
-    current user: {{user}}
+    <div class='user'>
+        Current User: {{user}}
+    </div>
     {% endif %}
+    <a href="/logout/" class='logout'> Logout </a>
 </div>
 
-<div style="margin-top:20px; width: 350px; background-color:rgba(71, 156, 212, 0.137)">
+<div class="feed">
 
     {% if user_subs %}
+    <div>
+        <div class='feed-title'>Current Subscriptions</div>
 
-    <p style="margin: 0px;padding-top: 8px;padding-left: 5%">Current Subscriptions</p>
+        <div class='feed-content'>
+            <div>
+                <div>Topic</div>
+                {% for sub in user_subs %}
+                <div>{{sub.hashtag_id.topic}}</div>
+                {% endfor %}
+            </div>
+            <div>
+                <div>Frequency</div>
+                {% for sub in user_subs %}
+                <div>{{sub.frequency}}</div>
+                {% endfor %}
+            </div>
 
-    <div style="display: inline-block; width: 130px;">
-        <p> <b>&nbsp &nbsp &nbsp &nbsp &nbsp Topic</b></p>
-        {% for sub in user_subs %}
-        <ul>
-            <li style="list-style-type:none">{{sub.hashtag_id.topic}}</li>
-        </ul>
-        {% endfor %}
+            <div>
+                <div>Sentiment</div>
+                {% for res in analysis_results %}
+                <div>{{res}}</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    <div style="display: inline-block; width: 50px">
-        <p> <b>&nbsp&nbsp &nbsp &nbsp &nbsp &nbsp Frequency</b></p>
-        {% for sub in user_subs %}
-        <ul style="padding-left: 20px">
-            <li style="list-style-type:none">{{sub.frequency}}</li>
-        </ul>
-        {% endfor %}
-    </div>
-
-    <div style="display: inline-block; width: 150px; text-align: center">
-        <p><b>&nbsp &nbsp &nbsp &nbsp &nbsp Sentiment</b></p>
-        {% for res in analysis_results %}
-        <ul>
-            <li style="list-style-type:none">{{res}}</li>
-        </ul>
-        {% endfor %}
-    </div>
-
     {% endif %}
 
+    <div>
+        <div class='.user-form-input-topics'>
+            <form method="post" action="/subscribe/" class='form'> {% csrf_token %}
+                Topic <input id="topic" type="text" name="topic" placeholder="ex: cat">
+                Frequency <input id="freq" type="text" name="freq" placeholder="X days">
+                <input type="submit" value="Subscribe to a Hashtag">
+            </form>
+            <form method="post" action="/unsubscribe/" class='form'> {% csrf_token %}
+                Topic <input id="topic" type="text" name="topic">
+                <input type="submit" value="Unsubscribe from a Hashtag">
+            </form>
+            <form method="get" action="/analyze/" class='form'>
+                <input type="hidden" name="username" value={{user}}>
+                Topic <input id="topic" type="text" name="topic">
+                <input type="submit" value="Get Analysis">
+            </form>
+        </div>
+        <div>
+            {% if error %}
+            Error: {{error}}
+            {% endif %}
+        </div>
+    </div>
 </div>
 
-<div style="margin-top: 15px; margin-bottom: 15px; color: darkred;">
-    {% if error %}
-    Error: {{error}}
-    {% endif %}
-</div>
-
-<div style="margin-top:20px">
-    <p></p>
-    <form method="post" action="/subscribe/"> {% csrf_token %}
-        Topic <input id="topic" type="text" name="topic" placeholder="ex: cat">
-        Frequency <input id="freq" type="text" name="freq" placeholder="X days">
-        <input type="submit" value="Subscribe to a Hashtag">
-    </form>
-    <p></p>
-    <form method="post" action="/unsubscribe/"> {% csrf_token %}
-        Topic <input id="topic" type="text" name="topic">
-        <input type="submit" value="Unsubscribe from a Hashtag">
-    </form>
-    <p></p>
-    <form method="get" action="/analyze/">
-        <input type="hidden" name="username" value={{user}}>
-        Topic <input id="topic" type="text" name="topic">
-        <input type="submit" value="Get Analysis">
-    </form>
-    <!-- <form method = "post" action="filter"> {% csrf_token %}
-        Username  <input id = "usern" type = "text" name = "username">
-        Topic <input id = "topic" type = "text" name = "topic">
-        Frequency <input id = "freq" type = "text" name = "freq"> 
-        <input type = "submit" value = "Filter">
-    </form> -->
-</div>
-
-<div style="margin-top: 15px; margin-bottom: 15px">
+<div>
     {% if graph and topic %}
     {% include "./charts.html" %}
     {% endif %}

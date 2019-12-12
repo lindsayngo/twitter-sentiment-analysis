@@ -2,7 +2,7 @@
 
 {% load static %}
 
-<div>
+<div class='charts'>
     <div id="gauge"></div>
     <div id="time"></div>
     <link rel="stylesheet" href="{% static 'charts.css' %}">
@@ -14,64 +14,64 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script>
-    var gaugeOptions = {
-        chart: {
-            type: 'solidgauge'
-        },
-        title: '{{topic}}',
-        pane: {
-            center: ['50%', '85%'],
-            size: '140%',
-            startAngle: -90,
-            endAngle: 90,
-            background: {
-                backgroundColor:
-                    Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                innerRadius: '60%',
-                outerRadius: '100%',
-                shape: 'arc'
-            }
-        },
-        // the value axis
-        yAxis: {
-            stops: [
-                [-4, '#ff8400'],
-                [4, '#95ff00'],
-            ],
-            lineWidth: 0,
-            tickWidth: 0,
-            minorTickInterval: null,
-            tickAmount: 2,
-            title: {
-                y: -70
+        var gaugeOptions = {
+            chart: {
+                type: 'solidgauge'
             },
-            labels: {
-                y: 16
-            }
-        },
-        plotOptions: {
-            solidgauge: {
-                dataLabels: {
-                    y: 5,
-                    borderWidth: 0,
-                    useHTML: true,
-                    enable: false
+            title: '{{topic}}',
+            pane: {
+                center: ['50%', '85%'],
+                size: '100%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+            // the value axis
+            yAxis: {
+                stops: [
+                    [-4, '#ff8400'],
+                    [4, '#95ff00'],
+                ],
+                lineWidth: 0,
+                tickWidth: 0,
+                minorTickInterval: null,
+                tickAmount: 2,
+                title: {
+                    y: -70
+                },
+                labels: {
+                    y: 16
+                }
+            },
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true,
+                        enable: false
+                    }
                 }
             }
-        }
-    };
+        };
 
-    var chartSpeed = Highcharts.chart('gauge', Highcharts.merge(gaugeOptions, {
-        yAxis: {
-            min: -4,
-            max: 4,
-        },
-        credits: {
-            enabled: false
-        },
-        series: [{
-            name: '{{topic}}',
-            data: [{{topic_analysis}}],
+        var chartSpeed = Highcharts.chart('gauge', Highcharts.merge(gaugeOptions, {
+            yAxis: {
+                min: -4,
+                max: 4,
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: '{{topic}}',
+                data: [{{ topic_analysis }}],
             dataLabels: {
                 format:
                     '<div style="text-align:center">' +
@@ -79,60 +79,60 @@
                     '<span style="font-size:12px;opacity:0.4">#{{topic}} Sentiment</span>' +
                     '</div>'
             },
-            tooltip:  { enabled: false }
+            tooltip: { enabled: false }
         }]
 
     }));
 
-    Highcharts.chart('time', {
-        chart: {
-            zoomType: 'x'
-        },
-        title: {
-            text: '#{{topic}} Sentiment'
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
+        Highcharts.chart('time', {
+            chart: {
+                zoomType: 'x'
+            },
             title: {
-            text: 'Sentiment'
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            area: {
-            fillColor: {
-                linearGradient: {
-                x1: 0,
-                y1: 0,
-                x2: 0,
-                y2: 1
-                },
-                stops: [
-                [0, Highcharts.getOptions().colors[0]],
-                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                ]
+                text: '#{{topic}} Sentiment'
             },
-            marker: {
-                radius: 2
+            xAxis: {
+                type: 'datetime'
             },
-            lineWidth: 1,
-            states: {
-                hover: {
-                lineWidth: 1
+            yAxis: {
+                title: {
+                    text: 'Sentiment'
                 }
             },
-            threshold: null
-            }
-        },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    },
+                    marker: {
+                        radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    threshold: null
+                }
+            },
 
-        series: [{
-            type: 'area',
-            name: '#{{topic}}',
-            data: {{timeseries}}
+            series: [{
+                type: 'area',
+                name: '#{{topic}}',
+                data: {{ timeseries }}
         }]
     });
 
