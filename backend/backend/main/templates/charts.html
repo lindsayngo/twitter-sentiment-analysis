@@ -2,7 +2,7 @@
 
 {% load static %}
 
-<div>
+<div class='charts'>
     <div id="gauge"></div>
     <div id="time"></div>
     <link rel="stylesheet" href="{% static 'charts.css' %}">
@@ -21,7 +21,7 @@
         title: '{{topic}}',
         pane: {
             center: ['50%', '85%'],
-            size: '140%',
+            size: '100%',
             startAngle: -90,
             endAngle: 90,
             background: {

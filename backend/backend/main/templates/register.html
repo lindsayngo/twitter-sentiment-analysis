@@ -8,13 +8,15 @@ Error: {{error}}
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'login.css' %}">
-<form method="post" action="/register/"> {% csrf_token %}
-    Username <input id="username" type="text" name="username">
-    Password <input id="password" type="password" name="password">
-    <input type="submit" value="Register">
-</form>
-<p>
-    Already have an account? <a href="/login/"> Login </a>
-</p>
+<div class='container'>
+    <form method="post" action="/register/"> {% csrf_token %}
+        Username <input id="username" type="text" name="username">
+        Password <input id="password" type="password" name="password">
+        <input type="submit" value="Register">
+    </form>
+    <p>
+        Already have an account? <a href="/login/"> Login </a>
+    </p>
+</div>
 
 {% endblock content %}

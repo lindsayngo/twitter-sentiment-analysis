@@ -32,12 +32,6 @@ python3 manage.py runserver
 python3 manage.py process_tasks
 ```
 
-## Build Angular
-- This would build the angular projects and bring them to django
-```
-ng build --prod --output-path <proj-root>\backend\backend\main\static --watch --output-hashing none
-```
-
 ## Build & Run Docker Compose
 - prereq: learn you some docker & install docker-compose
 ```
