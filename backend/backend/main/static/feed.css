@@ -26,7 +26,7 @@
     justify-content: space-around;
 }
 
-.feed > div {
+.feed>div {
     width: 70%;
 }
 
@@ -43,7 +43,7 @@
     text-align: center;
 }
 
-.feed-content > div > div:first-child {
+.feed-content>div>div:first-child {
     font-weight: 600;
     font-size: 20px;
 }
@@ -60,4 +60,8 @@
 .form * {
     padding: 5px;
     margin-right: 15px;
+}
+
+.error {
+    color: darkred;
 }

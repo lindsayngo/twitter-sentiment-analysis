@@ -89,7 +89,6 @@ def feed(request):
     content['analysis_results'] = analysis_results
     return render(request, 'feed.html', content)
 
-
 def subscribe(request):
     if "user" not in request.session:
         return redirect("/login")
@@ -100,8 +99,15 @@ def subscribe(request):
     if request.method == 'POST':
         topic = request.POST['topic']
         freq = request.POST['freq']
+        existing_sub = Subscription.objects.filter(user_id = user).filter(hashtag_id=topic)
 
-        if freq.isdigit() and freq != "0":
+        if not freq.isdigit() or freq == "0":
+            error = "Frequency field must be a nonzero postive integer (X days)!"
+            request.session['subscription_error'] = error
+        elif existing_sub:
+            error = "You are already subscribed to this hashtag!"
+            request.session['subscription_error'] = error
+        else:
             # create or get hashtag
             new_htag = Hashtag.objects.get_or_create(topic=topic)[0]
             
@@ -113,13 +119,7 @@ def subscribe(request):
                 last_scanned=(datetime.today() - timedelta(days=int(freq))),
             )
             request.session['subscription_error'] = None
-
-        else:
-            error = "Frequency field must be a nonzero postive integer (X days)!"
-            request.session['subscription_error'] = error
-
     return redirect('/feed')
-
 
 def unsubscribe(request):
     if "user" not in request.session:
@@ -173,7 +173,7 @@ def analyze(request):
         # subcription time has not come 
         else:
             request.session['graph'] = False 
-            error = "Your graphs for this subscription are not availble until your time."
+            error = "Your graphs for this subscription are not availble until your requested time."
             request.session['subscription_error'] = error
     # invalid subscription
     else:

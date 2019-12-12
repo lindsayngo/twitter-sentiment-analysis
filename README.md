@@ -25,9 +25,13 @@ mongod --noauth --dbpath mongo/data
 ```
 
 ## Setting up Twitter API Key
-- get your own key
-- create a ```<proj-root>/backend/backend/secretkey.py``` file and put key in here
-- settings.py will import the key set as TWT_API_SECRET_VALUE
+- get your own key via [twitter](https://python-twitter.readthedocs.io/en/latest/getting_started.html)
+- create a ```<proj-root>/backend/backend/secretkey.py``` file and put key values in here
+- settings.py should import the following values:
+  - TWT_API_KEY_VAL
+  - TWT_API_SECRET_VALUE
+  - TWT_ACCESS_TOKEN_VAL
+  - TWT_ACCESS_SECRET_VAL
 
 ## Run Django 
 - Prereqs: learn you some django

@@ -91,3 +91,6 @@ venv/
 */*.swp
 */*/*.swp
 */*/*/*.swp
+
+# DB
+backend/mongo

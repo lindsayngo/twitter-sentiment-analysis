@@ -5,6 +5,6 @@ import time
 def subscription_job():
     while True:
         run_update()
-        time.sleep(15) # runs shorter for demo purposes
+        time.sleep(60 * 30) # runs every 30 mins
 
 subscription_job()
